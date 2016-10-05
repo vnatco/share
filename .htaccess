@@ -1,0 +1,10 @@
+RewriteEngine on
+
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+REwriteRule ^(.*)$ view.php?id=$1 [L]
+
+RewriteRule ^$ share.php [L]
