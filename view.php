@@ -63,14 +63,16 @@
 	</div>
 	<div class="hTHolder"></div>
 	<script>
+		// Check if we have tag with class name "encrypted", otherwise there's error message
 		if($(".encrypted").length==1){
-			var encrypted=$(".encrypted").text();
-			var id=$(".encrypted").attr("data-id");
+			var encrypted=$(".encrypted").text(); // Get encrypted content
+			var id=$(".encrypted").attr("data-id"); // Get file id
 			var password=$(".encrypted").attr("data-password")=="true"?true:false;
 			$(".holder").empty();
 			
 			$(document).ready(function(){
 				if(password){
+					// If data is encrypted with password, show "enter password" input
 					$(".holder").append('<input class="pwd" type="password" placeholder="Please, enter password." value="" />').find("input").focus();
 					$(".holder").append('<div style="height:30px;"></div>');
 					$(".holder").append('<button class="submit">Submit</button>');
@@ -82,12 +84,15 @@
 						$("input,textarea").css("opacity",1);
 					},200);
 					
+					// Trigger "submit" button click if "enter" was pressed in password input
 					$(".holder input").bind("keydown",function(e){
 						if(e.which==13) $(".holder button").trigger("click");
 					});
 				}else{
+					// If data was not encrypted with password, decrypt it and show
 					var decrypted=CryptoJS.AES.decrypt(encrypted,"").toString(CryptoJS.enc.Utf8);
 					$(".holder").empty();
+					// Check if decryption was successful
 					if(decrypted.length<1){
 						$(".holder").append('<div class="error">Something went wrong while decrypting data. :(</div>');
 						shakeBox($(".holder"));
@@ -95,27 +100,34 @@
 				}
 			});
 			
+			// Click on "Submit" button, if data was encrypted with password
 			$(".holder").on("click","button.submit",function(){
+				// Get password input value, and check if it's not empty
 				var password=$("input").val();
 				if(password.length<1) return $("input").focus();
 				
+				// Decrypt data with password
 				var decrypted=CryptoJS.AES.decrypt(encrypted,password).toString(CryptoJS.enc.Utf8);
+				// Check if decryption was successful
 				if(decrypted.length<1){
+					// Show error message, focus password input and shake content
 					$(".error").slideDown(100);
 					$("input").focus();
 					shakeBox($(".holder"));
 				}else $(".holder").empty().append('<div class="decrypted"><pre>'+(decrypted)+'</pre></div><div><button class="delete">Delete</button></div>');
 			});
 			
+			// Click on "Delete" button
 			$(".holder").on("click","button.delete",function(){
+				// Send POST request to ajax.php file to delete current record
 				showLoader();
 				$.post("ajax.php?act=delete",{id:id},function(response){
 					hideLoader();
-					top.location.href='<?php echo SITE_FULL_URL; ?>';
+					top.location.href='<?php echo SITE_FULL_URL; ?>'; // Go to home page
 				});
 			});
 			
-			// Box is jQuery instance, not checking but keep in mind.
+			// "box" is jQuery instance, not checking but keep in mind.
 			var shakeBox=function(box){
 				$("body").css({"overflow-x":"hidden"});
 				var saved={position:box.css("position"),transition:box.css("transition")};
