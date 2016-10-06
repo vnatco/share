@@ -9,7 +9,7 @@ Before saving data on server, it's encrypted on client side with *[Advanced Encr
 4. Change *SITE_FULL_URL* constant in **config.inc.php**
 
 ### Example
-[http://share.examples.vnat.co/](http://share.examples.vnat.co/)
+[http://share.tools.vnat.co/](http://share.tools.vnat.co/)
 
 ### Screenshots
 ![Enter text, password and choose expiration time](screenshots/1.png?raw=true)  
