@@ -94,6 +94,7 @@
 			// Send POST request to ajax.php file to save current data
 			showLoader();
 			$.post("ajax.php?act=share",{data:d,time:t,password:p},function(response){
+				hideLoader();
 				// Check if everything went well
 				if(response=="ERROR"||response.length<1) alert("Something went wrong. Try again.");
 				else{
